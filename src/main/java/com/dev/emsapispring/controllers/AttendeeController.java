@@ -1,7 +1,7 @@
 package com.dev.emsapispring.controllers;
 
-import com.ems.emsdataservicespring.entities.dtos.AttendeeDto;
-import com.ems.emsdataservicespring.services.interfaces.AttendeeService;
+import com.dev.emsapispring.entities.dtos.AttendeeDto;
+import com.dev.emsapispring.services.interfaces.AttendeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

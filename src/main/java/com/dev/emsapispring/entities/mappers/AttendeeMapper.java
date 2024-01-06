@@ -1,7 +1,7 @@
 package com.dev.emsapispring.entities.mappers;
 
-import com.ems.emsdataservicespring.entities.dtos.AttendeeDto;
-import com.ems.emsdataservicespring.entities.models.Attendee;
+import com.dev.emsapispring.entities.dtos.AttendeeDto;
+import com.dev.emsapispring.entities.models.Attendee;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

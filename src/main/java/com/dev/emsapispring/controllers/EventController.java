@@ -1,8 +1,8 @@
 package com.dev.emsapispring.controllers;
 
-import com.ems.emsdataservicespring.entities.dtos.AddEventDto;
-import com.ems.emsdataservicespring.entities.dtos.EventDto;
-import com.ems.emsdataservicespring.services.interfaces.EventService;
+import com.dev.emsapispring.entities.dtos.AddEventDto;
+import com.dev.emsapispring.entities.dtos.EventDto;
+import com.dev.emsapispring.services.interfaces.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

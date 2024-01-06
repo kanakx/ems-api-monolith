@@ -1,7 +1,7 @@
 package com.dev.emsapispring.entities.mappers;
 
-import com.ems.emsdataservicespring.entities.dtos.AttendeeEventDto;
-import com.ems.emsdataservicespring.entities.models.AttendeeEvent;
+import com.dev.emsapispring.entities.dtos.AttendeeEventDto;
+import com.dev.emsapispring.entities.models.AttendeeEvent;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,7 +14,6 @@ import org.mapstruct.Mapping;
 )
 public interface AttendeeEventMapper {
 
-//    @Mapping(target = "attendee", ignore = true)
     @Mapping(source = "event", target = "eventDto")
     AttendeeEventDto mapToDto(AttendeeEvent attendeeEvent);
 

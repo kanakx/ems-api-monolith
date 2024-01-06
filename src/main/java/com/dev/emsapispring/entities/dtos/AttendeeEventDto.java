@@ -1,6 +1,6 @@
 package com.dev.emsapispring.entities.dtos;
 
-import com.ems.emsdataservicespring.entities.enums.MemberEventStatus;
+import com.dev.emsapispring.entities.enums.MemberEventStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class AttendeeEventDto {
 
     private Long idAttendeeEvent;
-//    private AttendeeDto attendee;
     private EventDto eventDto;
     private MemberEventStatus status;
 

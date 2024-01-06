@@ -1,8 +1,8 @@
 package com.dev.emsapispring.entities.mappers;
 
-import com.ems.emsdataservicespring.entities.dtos.AddEventDto;
-import com.ems.emsdataservicespring.entities.dtos.EventDto;
-import com.ems.emsdataservicespring.entities.models.Event;
+import com.dev.emsapispring.entities.dtos.AddEventDto;
+import com.dev.emsapispring.entities.dtos.EventDto;
+import com.dev.emsapispring.entities.models.Event;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

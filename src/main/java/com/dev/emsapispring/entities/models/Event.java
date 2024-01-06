@@ -1,6 +1,6 @@
 package com.dev.emsapispring.entities.models;
 
-import com.ems.emsdataservicespring.entities.enums.EventType;
+import com.dev.emsapispring.entities.enums.EventType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

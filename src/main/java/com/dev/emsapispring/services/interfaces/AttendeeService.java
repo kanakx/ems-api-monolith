@@ -1,6 +1,6 @@
 package com.dev.emsapispring.services.interfaces;
 
-import com.ems.emsdataservicespring.entities.dtos.AttendeeDto;
+import com.dev.emsapispring.entities.dtos.AttendeeDto;
 
 public interface AttendeeService {
 

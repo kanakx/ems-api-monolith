@@ -1,13 +1,13 @@
 package com.dev.emsapispring.services.implementations;
 
-import com.ems.emsdataservicespring.entities.dtos.AddEventDto;
-import com.ems.emsdataservicespring.entities.dtos.EventDto;
-import com.ems.emsdataservicespring.entities.mappers.EventMapper;
-import com.ems.emsdataservicespring.entities.models.Event;
-import com.ems.emsdataservicespring.exceptions.CustomApiException;
-import com.ems.emsdataservicespring.exceptions.ExceptionMessage;
-import com.ems.emsdataservicespring.repositories.EventRepository;
-import com.ems.emsdataservicespring.services.interfaces.EventService;
+import com.dev.emsapispring.entities.dtos.AddEventDto;
+import com.dev.emsapispring.entities.dtos.EventDto;
+import com.dev.emsapispring.entities.mappers.EventMapper;
+import com.dev.emsapispring.entities.models.Event;
+import com.dev.emsapispring.exceptions.CustomApiException;
+import com.dev.emsapispring.exceptions.ExceptionMessage;
+import com.dev.emsapispring.repositories.EventRepository;
+import com.dev.emsapispring.services.interfaces.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

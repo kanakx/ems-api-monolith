@@ -1,7 +1,7 @@
 package com.dev.emsapispring.services.interfaces;
 
-import com.ems.emsdataservicespring.entities.dtos.AddEventDto;
-import com.ems.emsdataservicespring.entities.dtos.EventDto;
+import com.dev.emsapispring.entities.dtos.AddEventDto;
+import com.dev.emsapispring.entities.dtos.EventDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

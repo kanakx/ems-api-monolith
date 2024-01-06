@@ -1,12 +1,12 @@
-package com.dev.emsapispring.config;
+package com.dev.emsapispring.config.db;
 
-import com.ems.emsdataservicespring.entities.enums.EventType;
-import com.ems.emsdataservicespring.entities.enums.MemberEventStatus;
-import com.ems.emsdataservicespring.entities.models.Attendee;
-import com.ems.emsdataservicespring.entities.models.AttendeeEvent;
-import com.ems.emsdataservicespring.entities.models.Event;
-import com.ems.emsdataservicespring.repositories.AttendeeRepository;
-import com.ems.emsdataservicespring.repositories.EventRepository;
+import com.dev.emsapispring.entities.enums.EventType;
+import com.dev.emsapispring.entities.enums.MemberEventStatus;
+import com.dev.emsapispring.entities.models.Attendee;
+import com.dev.emsapispring.entities.models.AttendeeEvent;
+import com.dev.emsapispring.entities.models.Event;
+import com.dev.emsapispring.repositories.AttendeeRepository;
+import com.dev.emsapispring.repositories.EventRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -81,7 +81,7 @@ public class DatabaseSeeder {
                     .idUser(2L)
                     .build();
 
-//            memberRepository.saveAll(List.of(member1, member2));
+//            attendeeRepository.saveAll(List.of(member1, member2));
 
 
             AttendeeEvent attendeeEvent1 = AttendeeEvent.builder()

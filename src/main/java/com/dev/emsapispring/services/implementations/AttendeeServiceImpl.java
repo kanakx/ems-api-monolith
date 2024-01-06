@@ -1,11 +1,11 @@
 package com.dev.emsapispring.services.implementations;
 
-import com.ems.emsdataservicespring.entities.dtos.AttendeeDto;
-import com.ems.emsdataservicespring.entities.mappers.AttendeeMapper;
-import com.ems.emsdataservicespring.entities.models.Attendee;
-import com.ems.emsdataservicespring.exceptions.CustomApiException;
-import com.ems.emsdataservicespring.repositories.AttendeeRepository;
-import com.ems.emsdataservicespring.services.interfaces.AttendeeService;
+import com.dev.emsapispring.entities.dtos.AttendeeDto;
+import com.dev.emsapispring.entities.mappers.AttendeeMapper;
+import com.dev.emsapispring.entities.models.Attendee;
+import com.dev.emsapispring.exceptions.CustomApiException;
+import com.dev.emsapispring.repositories.AttendeeRepository;
+import com.dev.emsapispring.services.interfaces.AttendeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

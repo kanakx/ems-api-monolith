@@ -1,6 +1,6 @@
 package com.dev.emsapispring.entities.models;
 
-import com.ems.emsdataservicespring.entities.enums.MemberEventStatus;
+import com.dev.emsapispring.entities.enums.MemberEventStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +11,7 @@ import lombok.*;
 @Entity
 public class AttendeeEvent {
 
+    //TODO Adjust entities to use Postgres. Maybe it will work without any changes?
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
@@ -18,7 +19,7 @@ public class AttendeeEvent {
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_attendee", nullable = false)
+    @JoinColumn(nullable = false)
     private Attendee attendee;
 
     @ToString.Exclude
@@ -29,8 +30,5 @@ public class AttendeeEvent {
     @Enumerated(EnumType.STRING)
     @Column(length = 32, nullable = false)
     private MemberEventStatus status;
-
-//    @Column(nullable = false)
-//    private boolean isInvited;
 
 }
