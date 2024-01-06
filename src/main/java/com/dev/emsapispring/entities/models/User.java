@@ -37,7 +37,12 @@ public class User implements UserDetails {
     @Column(length = 100, nullable = false)
     private UserRole userRole;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
     private Attendee attendee;
 
     @Override

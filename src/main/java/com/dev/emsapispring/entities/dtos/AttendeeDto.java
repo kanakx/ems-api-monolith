@@ -14,7 +14,9 @@ import java.util.List;
 public class AttendeeDto {
 
     private Long idAttendee;
-    private String fullName;
+    private String firstName;
+    private String lastName;
     private List<AttendeeEventDto> attendeeEventDtoList;
+    private UserDto userDto;
 
 }

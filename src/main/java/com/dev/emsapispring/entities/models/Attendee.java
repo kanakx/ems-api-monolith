@@ -1,10 +1,7 @@
 package com.dev.emsapispring.entities.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +10,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "user")
 @Entity
 @Table(name = "attendees")
 public class Attendee {
@@ -32,7 +30,7 @@ public class Attendee {
     private List<AttendeeEvent> attendeeEventList = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "id_user",nullable = false)
     private User user;
 
 }
