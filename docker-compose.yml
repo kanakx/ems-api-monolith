@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+
+  postgres-db:
+    image: postgres:alpine
+    container_name: docker-postgres-ems-api
+    environment:
+      POSTGRES_DB: ems-api-db
+      POSTGRES_USER: ems-api-db-user
+      POSTGRES_PASSWORD: ems-api-db-pwd
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
