@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/data/attendees")
+@RequestMapping("/attendees")
 @RequiredArgsConstructor
 public class AttendeeController {
 
@@ -15,11 +15,6 @@ public class AttendeeController {
     @GetMapping("/{id}")
     public AttendeeDto findById(@PathVariable Long id) {
         return attendeeService.findById(id);
-    }
-
-    @GetMapping
-    public AttendeeDto findByUserId(@RequestParam String idUser) {
-        return attendeeService.findByIdUser(idUser);
     }
 
 }

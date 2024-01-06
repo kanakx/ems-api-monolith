@@ -1,19 +1,20 @@
 package com.dev.emsapispring.config.security;
 
+import com.dev.emsapispring.entities.models.User;
 import com.dev.emsapispring.exceptions.CustomApiException;
 import com.dev.emsapispring.exceptions.ExceptionMessage;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -22,6 +23,23 @@ public class JwtService {
 
     public JwtService(@Value("${jwt.secret}") String secretKey) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
+
+    public String generateToken(User user) {
+        long nowMillis = System.currentTimeMillis();
+        Date now = new Date(nowMillis);
+
+        String userRoles = user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        return Jwts.builder()
+                .setSubject(String.valueOf(user.getIdUser()))
+                .claim("roles", userRoles)
+                .setIssuedAt(now)
+                .setExpiration(new Date(nowMillis + 1000 * 60 * 60))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
     }
 
     public boolean validateToken(String token) {

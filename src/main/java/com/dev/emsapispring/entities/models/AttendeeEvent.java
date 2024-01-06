@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "attendees_events")
 public class AttendeeEvent {
 
     //TODO Adjust entities to use Postgres. Maybe it will work without any changes?

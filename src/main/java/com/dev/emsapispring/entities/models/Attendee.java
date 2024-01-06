@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "attendees")
 public class Attendee {
 
     @Id
@@ -21,11 +22,12 @@ public class Attendee {
     @Column(updatable = false)
     private Long idAttendee;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private User user;
+
     @Column(length = 100, nullable = false)
     private String fullName;
-
-    @Column(nullable = false)
-    private Long idUser;
 
     @OneToMany(mappedBy = "attendee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AttendeeEvent> attendeeEventList = new ArrayList<>();

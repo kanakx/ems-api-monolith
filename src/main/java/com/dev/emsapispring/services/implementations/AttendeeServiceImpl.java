@@ -31,16 +31,4 @@ public class AttendeeServiceImpl implements AttendeeService {
         return attendeeMapper.mapToDto(attendee);
     }
 
-    @Override
-    public AttendeeDto findByIdUser(String idUser) {
-        Optional<Attendee> attendeeOptional = attendeeRepository.findByIdUser(Long.valueOf(idUser));
-        Attendee attendee = attendeeOptional
-                .orElseThrow(() -> CustomApiException.builder()
-                        .httpStatus(HttpStatus.NOT_FOUND)
-                        .message("Attendee not found")
-                        .build());
-
-        return attendeeMapper.mapToDto(attendee);
-    }
-
 }

@@ -5,6 +5,5 @@ import com.dev.emsapispring.entities.dtos.AttendeeDto;
 public interface AttendeeService {
 
     AttendeeDto findById(Long id);
-    AttendeeDto findByIdUser(String idUser);
 
 }

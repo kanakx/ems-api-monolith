@@ -2,11 +2,14 @@ package com.dev.emsapispring.config.db;
 
 import com.dev.emsapispring.entities.enums.EventType;
 import com.dev.emsapispring.entities.enums.MemberEventStatus;
+import com.dev.emsapispring.entities.enums.UserRole;
 import com.dev.emsapispring.entities.models.Attendee;
 import com.dev.emsapispring.entities.models.AttendeeEvent;
 import com.dev.emsapispring.entities.models.Event;
+import com.dev.emsapispring.entities.models.User;
 import com.dev.emsapispring.repositories.AttendeeRepository;
 import com.dev.emsapispring.repositories.EventRepository;
+import com.dev.emsapispring.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +23,8 @@ public class DatabaseSeeder {
     @Bean
     CommandLineRunner commandLineRunner(
             EventRepository eventRepository,
-            AttendeeRepository attendeeRepository
+            AttendeeRepository attendeeRepository,
+            UserRepository userRepository
     ) {
         return args -> {
             Event event1 = Event.builder()
@@ -70,15 +74,29 @@ public class DatabaseSeeder {
 
             eventRepository.saveAll(List.of(event1, event2, event3, event4, event5));
 
+            User user1 = User.builder()
+                    .email("user1@mail.com")
+                    .password("pwd")
+                    .userRole(UserRole.USER)
+                    .build();
+
+            User user2 = User.builder()
+                    .email("user1@mail.com")
+                    .password("pwd")
+                    .userRole(UserRole.USER)
+                    .build();
+
+            userRepository.saveAll(List.of(user1, user2));
+
 
             Attendee attendee1 = Attendee.builder()
                     .fullName("John Doe 1")
-                    .idUser(1L)
+                    .user(user1)
                     .build();
 
             Attendee attendee2 = Attendee.builder()
                     .fullName("John Doe 2")
-                    .idUser(2L)
+                    .user(user2)
                     .build();
 
 //            attendeeRepository.saveAll(List.of(member1, member2));
