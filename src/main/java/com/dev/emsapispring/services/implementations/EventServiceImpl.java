@@ -2,10 +2,14 @@ package com.dev.emsapispring.services.implementations;
 
 import com.dev.emsapispring.entities.dtos.AddEventDto;
 import com.dev.emsapispring.entities.dtos.EventDto;
+import com.dev.emsapispring.entities.enums.MemberEventStatus;
 import com.dev.emsapispring.entities.mappers.EventMapper;
+import com.dev.emsapispring.entities.models.Attendee;
+import com.dev.emsapispring.entities.models.AttendeeEvent;
 import com.dev.emsapispring.entities.models.Event;
 import com.dev.emsapispring.exceptions.CustomApiException;
 import com.dev.emsapispring.exceptions.ExceptionMessage;
+import com.dev.emsapispring.repositories.AttendeeRepository;
 import com.dev.emsapispring.repositories.EventRepository;
 import com.dev.emsapispring.services.interfaces.EventService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ public class EventServiceImpl implements EventService {
 
     private final EventMapper eventMapper;
     private final EventRepository eventRepository;
+    private final AttendeeRepository attendeeRepository;
 
     @Override
     public List<EventDto> findAll() {
@@ -53,8 +58,26 @@ public class EventServiceImpl implements EventService {
                     .build();
         });
 
+        Optional<Attendee> attendeeOptional = attendeeRepository.findById(addEventDto.getIdAttendee());
+        Attendee attendee = attendeeOptional
+                .orElseThrow(() -> CustomApiException.builder()
+                        .httpStatus(HttpStatus.NOT_FOUND)
+                        .message("Attendee not found")
+                        .build());
+
         Event newEvent = eventMapper.mapToEntity(addEventDto);
-        return eventMapper.mapToDto(eventRepository.save(newEvent));
+        Event savedEvent = eventRepository.save(newEvent);
+
+        AttendeeEvent attendeeEvent = AttendeeEvent.builder()
+                .attendee(attendee)
+                .event(newEvent)
+                .status(MemberEventStatus.ACCEPTED)
+                .build();
+
+        attendee.getAttendeeEventList().add(attendeeEvent);
+        attendeeRepository.save(attendee);
+
+        return eventMapper.mapToDto(savedEvent);
     }
 
     @Transactional
