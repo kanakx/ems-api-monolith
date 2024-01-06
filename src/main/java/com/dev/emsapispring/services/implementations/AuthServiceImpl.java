@@ -4,6 +4,7 @@ import com.dev.emsapispring.config.security.JwtService;
 import com.dev.emsapispring.entities.dtos.*;
 import com.dev.emsapispring.entities.enums.UserRole;
 import com.dev.emsapispring.entities.mappers.UserMapper;
+import com.dev.emsapispring.entities.models.Attendee;
 import com.dev.emsapispring.entities.models.User;
 import com.dev.emsapispring.exceptions.CustomApiException;
 import com.dev.emsapispring.exceptions.ExceptionMessage;
@@ -40,12 +41,20 @@ public class AuthServiceImpl implements AuthService {
         });
 
         String encodedPassword = passwordEncoder.encode(registerUserDto.getPassword());
+
         User user = User.builder()
                 .email(registerUserDto.getEmail())
                 .password(encodedPassword)
                 .userRole(UserRole.USER)
                 .build();
 
+        Attendee attendee = Attendee.builder()
+                .user(user)
+                .firstName(registerUserDto.getFirstName())
+                .lastName(registerUserDto.getLastName())
+                .build();
+
+        user.setAttendee(attendee);
         User saved = userRepository.save(user);
 
         return userMapper.mapToDto(saved);

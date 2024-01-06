@@ -90,12 +90,14 @@ public class DatabaseSeeder {
 
 
             Attendee attendee1 = Attendee.builder()
-                    .fullName("John Doe 1")
+                    .firstName("f1")
+                    .lastName("l1")
                     .user(user1)
                     .build();
 
             Attendee attendee2 = Attendee.builder()
-                    .fullName("John Doe 2")
+                    .firstName("f2")
+                    .lastName("l2")
                     .user(user2)
                     .build();
 

@@ -22,14 +22,17 @@ public class Attendee {
     @Column(updatable = false)
     private Long idAttendee;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private User user;
+    @Column(length = 100, nullable = false)
+    private String firstName;
 
     @Column(length = 100, nullable = false)
-    private String fullName;
+    private String lastName;
 
     @OneToMany(mappedBy = "attendee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AttendeeEvent> attendeeEventList = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private User user;
 
 }

@@ -37,6 +37,9 @@ public class User implements UserDetails {
     @Column(length = 100, nullable = false)
     private UserRole userRole;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Attendee attendee;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(userRole.name()));
