@@ -2,6 +2,7 @@ package com.dev.emsapispring.services.implementations;
 
 import com.dev.emsapispring.entities.dtos.AddEventDto;
 import com.dev.emsapispring.entities.dtos.EventDto;
+import com.dev.emsapispring.entities.enums.EventType;
 import com.dev.emsapispring.entities.enums.MemberEventStatus;
 import com.dev.emsapispring.entities.mappers.EventMapper;
 import com.dev.emsapispring.entities.models.Attendee;
@@ -13,6 +14,8 @@ import com.dev.emsapispring.repositories.AttendeeRepository;
 import com.dev.emsapispring.repositories.EventRepository;
 import com.dev.emsapispring.services.interfaces.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,10 +30,20 @@ public class EventServiceImpl implements EventService {
     private final EventMapper eventMapper;
     private final EventRepository eventRepository;
     private final AttendeeRepository attendeeRepository;
+    private static final String ENTITY_NAME = "Event";
 
     @Override
-    public List<EventDto> findAll() {
-        List<Event> eventList = eventRepository.findAll();
+    public List<EventDto> findAll(EventType type, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        List<Event> eventList;
+        
+        if (type != null) {
+            eventList = eventRepository.findAllByType(type, pageable)
+                    .getContent();
+        } else {
+            eventList = eventRepository.findAll();
+        }
+        
         return eventList.stream()
                 .map(eventMapper::mapToDto)
                 .toList();
@@ -42,7 +55,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventOptional.orElseThrow(() ->
                 CustomApiException.builder()
                         .httpStatus(HttpStatus.NOT_FOUND)
-                        .message(ExceptionMessage.entityNotFound("Event"))
+                        .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
                         .build());
 
         return eventMapper.mapToDto(event);
@@ -54,7 +67,7 @@ public class EventServiceImpl implements EventService {
         eventRepository.findByName(addEventDto.getName()).ifPresent(event -> {
             throw CustomApiException.builder()
                     .httpStatus(HttpStatus.BAD_REQUEST)
-                    .message(ExceptionMessage.entityAlreadyExists("Event"))
+                    .message(ExceptionMessage.entityAlreadyExists(ENTITY_NAME))
                     .build();
         });
 
@@ -86,7 +99,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> CustomApiException.builder()
                         .httpStatus(HttpStatus.NOT_FOUND)
-                        .message(ExceptionMessage.entityNotFound("Event"))
+                        .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
                         .build());
 
         // Check if there is a conflicting event
@@ -96,7 +109,7 @@ public class EventServiceImpl implements EventService {
         if (isConflictingEventPresent) {
             throw CustomApiException.builder()
                     .httpStatus(HttpStatus.BAD_REQUEST)
-                    .message(ExceptionMessage.entityAlreadyExists("Event"))
+                    .message(ExceptionMessage.entityAlreadyExists(ENTITY_NAME))
                     .build();
         }
 
@@ -116,7 +129,7 @@ public class EventServiceImpl implements EventService {
         if (!eventRepository.existsById(id)) {
             throw CustomApiException.builder()
                     .httpStatus(HttpStatus.NOT_FOUND)
-                    .message(ExceptionMessage.entityNotFound("Event"))
+                    .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
                     .build();
         }
         eventRepository.deleteById(id);

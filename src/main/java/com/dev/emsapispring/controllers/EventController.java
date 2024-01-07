@@ -2,6 +2,7 @@ package com.dev.emsapispring.controllers;
 
 import com.dev.emsapispring.entities.dtos.AddEventDto;
 import com.dev.emsapispring.entities.dtos.EventDto;
+import com.dev.emsapispring.entities.enums.EventType;
 import com.dev.emsapispring.services.interfaces.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,12 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping
-    public List<EventDto> findAll() {
-        return eventService.findAll();
+    public List<EventDto> findAll(
+            @RequestParam(required = false) EventType type,
+            @RequestParam(required = false, defaultValue = "0") int pageNo,
+            @RequestParam(required = false, defaultValue = "5") int pageSize
+    ) {
+        return eventService.findAll(type, pageNo, pageSize);
     }
 
     @GetMapping("/{id}")
