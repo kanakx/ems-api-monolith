@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 public class TokenValidationResponseDto {
 
     private Boolean isValid;
-    private String token;
 
 }
