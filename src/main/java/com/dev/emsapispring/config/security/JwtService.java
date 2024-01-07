@@ -1,5 +1,6 @@
 package com.dev.emsapispring.config.security;
 
+import com.dev.emsapispring.entities.dtos.TokenDto;
 import com.dev.emsapispring.entities.models.User;
 import com.dev.emsapispring.exceptions.CustomApiException;
 import com.dev.emsapispring.exceptions.ExceptionMessage;

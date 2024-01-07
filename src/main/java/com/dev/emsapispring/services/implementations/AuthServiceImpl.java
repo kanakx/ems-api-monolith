@@ -87,7 +87,6 @@ public class AuthServiceImpl implements AuthService {
             jwtService.validateToken(tokenDto.getToken());
             return TokenValidationResponseDto.builder()
                     .isValid(true)
-                    .token(tokenDto.getToken())
                     .build();
         } catch (ExpiredJwtException e) {
             // Specific handling for expired token
