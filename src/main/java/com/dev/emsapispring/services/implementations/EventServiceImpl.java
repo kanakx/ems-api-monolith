@@ -14,13 +14,13 @@ import com.dev.emsapispring.repositories.AttendeeRepository;
 import com.dev.emsapispring.repositories.EventRepository;
 import com.dev.emsapispring.services.interfaces.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,20 +33,19 @@ public class EventServiceImpl implements EventService {
     private static final String ENTITY_NAME = "Event";
 
     @Override
-    public List<EventDto> findAll(EventType type, int pageNo, int pageSize) {
+    public Page<EventDto> findAll(EventType type, int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        List<Event> eventList;
+        Page<EventDto> eventDtoPage;
         
         if (type != null) {
-            eventList = eventRepository.findAllByType(type, pageable)
-                    .getContent();
+            eventDtoPage = eventRepository.findAllByType(type, pageable)
+                    .map(eventMapper::mapToDto);
         } else {
-            eventList = eventRepository.findAll();
+            eventDtoPage = eventRepository.findAll(pageable)
+                    .map(eventMapper::mapToDto);
         }
-        
-        return eventList.stream()
-                .map(eventMapper::mapToDto)
-                .toList();
+
+        return eventDtoPage;
     }
 
     @Override

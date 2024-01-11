@@ -32,6 +32,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+  mvc:
+    log-request-details: true
 
 allowed-origins:
   http://localhost:5173,

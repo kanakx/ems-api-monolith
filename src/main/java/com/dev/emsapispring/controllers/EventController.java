@@ -5,9 +5,8 @@ import com.dev.emsapispring.entities.dtos.EventDto;
 import com.dev.emsapispring.entities.enums.EventType;
 import com.dev.emsapispring.services.interfaces.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/events")
@@ -17,10 +16,10 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping
-    public List<EventDto> findAll(
+    public Page<EventDto> findAll(
             @RequestParam(required = false) EventType type,
             @RequestParam(required = false, defaultValue = "0") int pageNo,
-            @RequestParam(required = false, defaultValue = "5") int pageSize
+            @RequestParam(required = false, defaultValue = "50") int pageSize
     ) {
         return eventService.findAll(type, pageNo, pageSize);
     }
