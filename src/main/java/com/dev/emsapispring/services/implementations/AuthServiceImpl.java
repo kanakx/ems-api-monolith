@@ -89,19 +89,16 @@ public class AuthServiceImpl implements AuthService {
                     .isValid(true)
                     .build();
         } catch (ExpiredJwtException e) {
-            // Specific handling for expired token
             throw CustomApiException.builder()
                     .httpStatus(HttpStatus.UNAUTHORIZED)
                     .message("Token expired")
                     .build();
         } catch (MalformedJwtException e) {
-            // Specific handling for malformed token
             throw CustomApiException.builder()
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .message("Invalid token format")
                     .build();
         } catch (JwtException e) {
-            // General JWT exception
             throw CustomApiException.builder()
                     .httpStatus(HttpStatus.UNAUTHORIZED)
                     .message("Invalid token")

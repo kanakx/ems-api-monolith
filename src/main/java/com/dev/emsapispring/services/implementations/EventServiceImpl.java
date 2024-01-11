@@ -101,7 +101,6 @@ public class EventServiceImpl implements EventService {
                         .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
                         .build());
 
-        // Check if there is a conflicting event
         boolean isConflictingEventPresent = eventRepository.findAllByName(updatedEventDto.getName()).stream()
                 .anyMatch(existingEvent -> !existingEvent.getIdEvent().equals(event.getIdEvent()));
 

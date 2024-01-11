@@ -48,7 +48,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (CustomApiException ex) {
-            // Log exception details if necessary
             response.setStatus(ex.getHttpStatus().value());
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"" + ex.getMessage() + "\"}");

@@ -12,7 +12,6 @@ import lombok.*;
 @Table(name = "attendees_events")
 public class AttendeeEvent {
 
-    //TODO Adjust entities to use Postgres. Maybe it will work without any changes?
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
