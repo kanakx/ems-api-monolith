@@ -2,14 +2,14 @@ package com.dev.emsapispring.services.interfaces;
 
 import com.dev.emsapispring.entities.dtos.AddEventDto;
 import com.dev.emsapispring.entities.dtos.EventDto;
-import com.dev.emsapispring.entities.enums.EventType;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface EventService {
 
-    Page<EventDto> findAll(EventType type, int pageNo, int pageSize);
+    List<EventDto> findAll();
     EventDto findById(Long id);
     EventDto save(AddEventDto addEventDto);
     EventDto update(Long id, EventDto updatedEventDto);
