@@ -2,12 +2,10 @@ package com.dev.emsapispring.controllers;
 
 import com.dev.emsapispring.entities.dtos.AddEventDto;
 import com.dev.emsapispring.entities.dtos.EventDto;
-import com.dev.emsapispring.entities.enums.EventType;
 import com.dev.emsapispring.services.interfaces.EventService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
