@@ -36,9 +36,9 @@ public class AuthController {
 
     @PostMapping("/validate")
     public TokenValidationResponseDto validateToken(@RequestBody TokenDto tokenDto) {
-        logger.debug("Received token validation request");
+        logger.info("Received token validation request");
         TokenValidationResponseDto validationResponse = authService.validateToken(tokenDto);
-        logger.debug("Token validation request completed");
+        logger.info("Token validation request completed");
         return validationResponse;
     }
 
