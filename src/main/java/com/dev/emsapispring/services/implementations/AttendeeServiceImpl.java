@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +27,6 @@ public class AttendeeServiceImpl implements AttendeeService {
     private static final Logger logger = LoggerFactory.getLogger(AttendeeServiceImpl.class);
     private final AttendeeRepository attendeeRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final AttendeeMapper attendeeMapper;
     private static final String ENTITY_NAME = "Attendee";
 
