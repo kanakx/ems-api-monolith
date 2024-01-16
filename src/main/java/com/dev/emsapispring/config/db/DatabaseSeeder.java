@@ -90,21 +90,19 @@ public class DatabaseSeeder {
 
             userRepository.saveAll(List.of(user1, user2));
 
-
             Attendee attendee1 = Attendee.builder()
-                    .firstName("f1")
-                    .lastName("l1")
+                    .firstName("FirstName 1")
+                    .lastName("LastName 1")
                     .user(user1)
                     .build();
 
             Attendee attendee2 = Attendee.builder()
-                    .firstName("f2")
-                    .lastName("l2")
+                    .firstName("FirstName 2")
+                    .lastName("LastName 2")
                     .user(user2)
                     .build();
 
 //            attendeeRepository.saveAll(List.of(member1, member2));
-
 
             AttendeeEvent attendeeEvent1 = AttendeeEvent.builder()
                     .attendee(attendee1)
