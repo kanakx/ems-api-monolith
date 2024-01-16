@@ -35,7 +35,6 @@ public class AttendeeServiceImpl implements AttendeeService {
         logger.info("Processing request to find all attendees");
         List<Attendee> attendeeList = attendeeRepository.findAll();
         logger.info("Request to find attendees processed successfully with {} attendees found", attendeeList.size());
-
         return attendeeList.stream()
                 .map(attendeeMapper::mapToDto)
                 .toList();
@@ -47,7 +46,6 @@ public class AttendeeServiceImpl implements AttendeeService {
         Optional<Attendee> attendeeOptional = attendeeRepository.findById(id);
         Attendee attendee = attendeeOptional.orElseThrow(() -> {
             logger.warn("Attendee not found for ID: {}", id);
-
             return CustomApiException.builder()
                     .httpStatus(HttpStatus.NOT_FOUND)
                     .message(ExceptionMessage.entityNotFound(ENTITY_NAME))

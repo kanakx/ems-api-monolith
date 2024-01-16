@@ -43,7 +43,6 @@ public class EventServiceImpl implements EventService {
         Optional<Event> eventOptional = eventRepository.findById(id);
         Event event = eventOptional.orElseThrow(() -> {
             logger.warn("Attempted to find a non-existing event with ID {}", id);
-
             return CustomApiException.builder()
                     .httpStatus(HttpStatus.NOT_FOUND)
                     .message(ExceptionMessage.entityNotFound(ENTITY_NAME))

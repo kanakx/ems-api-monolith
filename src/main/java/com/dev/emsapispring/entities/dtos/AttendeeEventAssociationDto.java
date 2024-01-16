@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttendeeEventDto {
+public class AttendeeEventAssociationDto {
 
     private Long idAttendeeEvent;
-    private EventDto eventDto;
+    private Long idAttendee;
+    private Long idEvent;
     private AttendeeEventStatus status;
 
 }

@@ -1,6 +1,6 @@
 package com.dev.emsapispring.entities.models;
 
-import com.dev.emsapispring.entities.enums.MemberEventStatus;
+import com.dev.emsapispring.entities.enums.AttendeeEventStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,6 +29,6 @@ public class AttendeeEvent {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 32, nullable = false)
-    private MemberEventStatus status;
+    private AttendeeEventStatus status;
 
 }

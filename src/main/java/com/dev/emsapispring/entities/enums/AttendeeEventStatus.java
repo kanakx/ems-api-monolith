@@ -1,6 +1,6 @@
 package com.dev.emsapispring.entities.enums;
 
-public enum MemberEventStatus {
+public enum AttendeeEventStatus {
 
     ACCEPTED,
     DECLINED

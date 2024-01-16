@@ -1,7 +1,7 @@
 package com.dev.emsapispring.config.db;
 
 import com.dev.emsapispring.entities.enums.EventType;
-import com.dev.emsapispring.entities.enums.MemberEventStatus;
+import com.dev.emsapispring.entities.enums.AttendeeEventStatus;
 import com.dev.emsapispring.entities.enums.UserRole;
 import com.dev.emsapispring.entities.models.Attendee;
 import com.dev.emsapispring.entities.models.AttendeeEvent;
@@ -109,17 +109,17 @@ public class DatabaseSeeder {
             AttendeeEvent attendeeEvent1 = AttendeeEvent.builder()
                     .attendee(attendee1)
                     .event(event1)
-                    .status(MemberEventStatus.ACCEPTED)
+                    .status(AttendeeEventStatus.ACCEPTED)
                     .build();
             AttendeeEvent attendeeEvent2 = AttendeeEvent.builder()
                     .attendee(attendee1)
                     .event(event2)
-                    .status(MemberEventStatus.DECLINED)
+                    .status(AttendeeEventStatus.DECLINED)
                     .build();
             AttendeeEvent attendeeEvent3 = AttendeeEvent.builder()
                     .attendee(attendee2)
                     .event(event3)
-                    .status(MemberEventStatus.ACCEPTED)
+                    .status(AttendeeEventStatus.ACCEPTED)
                     .build();
 
              attendee1.setAttendeeEventList(List.of(attendeeEvent1, attendeeEvent2));
