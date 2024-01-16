@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -87,6 +89,38 @@ public class AuthServiceImpl implements AuthService {
         return TokenDto.builder()
                 .token(token)
                 .build();
+    }
+
+    @Override
+    public void changePassword(Long idUser, PasswordChangeDto passwordChangeDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentLoggedInUsername = authentication.getName();
+
+        User currentUser = userRepository.findByEmail(currentLoggedInUsername)
+                .orElseThrow(() -> {
+                    logger.warn("Password change attempt for non-existent user with email: {}", currentLoggedInUsername);
+                    return CustomApiException.builder()
+                            .httpStatus(HttpStatus.BAD_REQUEST)
+                            .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
+                            .build();
+                });
+
+        if (!currentUser.getIdUser().equals(idUser)) {
+            throw CustomApiException.builder()
+                    .httpStatus(HttpStatus.UNAUTHORIZED)
+                    .message(ExceptionMessage.unauthorized())
+                    .build();
+        }
+
+        if (!passwordEncoder.matches(passwordChangeDto.getCurrentPassword(), currentUser.getPassword())) {
+            throw CustomApiException.builder()
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .message(ExceptionMessage.invalidCredentials(ENTITY_NAME))
+                    .build();
+        }
+
+        currentUser.setPassword(passwordEncoder.encode(passwordChangeDto.getNewPassword()));
+        userRepository.save(currentUser);
     }
 
     @Override

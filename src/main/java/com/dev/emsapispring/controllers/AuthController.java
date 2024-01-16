@@ -5,10 +5,7 @@ import com.dev.emsapispring.services.interfaces.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -32,6 +29,13 @@ public class AuthController {
         TokenDto token = authService.login(loginUserDto);
         logger.info("Login request completed for email: {}", loginUserDto.getEmail());
         return token;
+    }
+
+    @PutMapping("/change-password/{idUser}")
+    public void changePassword(@PathVariable Long idUser, @RequestBody PasswordChangeDto passwordChangeDto) {
+        logger.info("Received password change request for user with ID: {}", idUser);
+        authService.changePassword(idUser, passwordChangeDto);
+        logger.info("Password change request completed for user with ID: {}", idUser);
     }
 
     @PostMapping("/validate")

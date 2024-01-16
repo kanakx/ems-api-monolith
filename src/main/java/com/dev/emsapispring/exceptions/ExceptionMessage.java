@@ -12,6 +12,14 @@ public class ExceptionMessage {
         return entityName + " with such details already exists";
     }
 
+    public static String invalidCredentials(String entityName) {
+        return "Incorrect credentials for user " + entityName;
+    }
+
+    public static String unauthorized() {
+        return "Unauthorized to perform this action";
+    }
+
     public static String invalidToken() {
         return "Invalid JWT token";
     }
