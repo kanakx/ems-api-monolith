@@ -74,14 +74,13 @@ public class EventServiceImpl implements EventService {
         Event savedEvent = eventRepository.save(newEvent);
 
         logger.info("Request to save event '{}' with ID {} processed successfully", savedEvent.getName(), savedEvent.getIdEvent());
-
         return eventMapper.mapToDto(savedEvent);
     }
 
     @Transactional
     @Override
     public EventDto update(Long id, EventDto updatedEventDto) {
-        logger.info("Processing request to update a new event with ID: {}", id);
+        logger.info("Processing request to update an event with ID: {}", id);
         Event eventToUpdate = eventRepository.findById(id).orElseThrow(() -> {
             logger.warn("Attempted to update a non-existent event with ID {}", id);
 

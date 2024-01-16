@@ -4,6 +4,7 @@ import com.dev.emsapispring.config.security.JwtService;
 import com.dev.emsapispring.entities.dtos.*;
 import com.dev.emsapispring.entities.enums.UserRole;
 import com.dev.emsapispring.entities.mappers.UserMapper;
+import com.dev.emsapispring.entities.models.Attendee;
 import com.dev.emsapispring.entities.models.User;
 import com.dev.emsapispring.exceptions.CustomApiException;
 import com.dev.emsapispring.exceptions.ExceptionMessage;
@@ -50,15 +51,23 @@ public class AuthServiceImpl implements AuthService {
                 .userRole(UserRole.USER)
                 .build();
 
-        User saved = userRepository.save(user);
-        logger.info("Request to register user with email: {} processed successfully", saved.getEmail());
+        Attendee attendee = Attendee.builder()
+                .firstName(registerUserDto.getFirstName())
+                .lastName(registerUserDto.getLastName())
+                .user(user)
+                .build();
 
+        user.setAttendee(attendee);
+        User saved = userRepository.save(user);
+
+        logger.info("Request to register user with email: {} processed successfully", saved.getEmail());
         return userMapper.mapToDto(saved);
     }
 
     @Override
     public TokenDto login(LoginUserDto loginUserDto) {
         logger.info("Processing request to login user with email: {}", loginUserDto.getEmail());
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginUserDto.getEmail(), loginUserDto.getPassword())
         );
@@ -66,6 +75,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(loginUserDto.getEmail())
                 .orElseThrow(() -> {
                     logger.warn("Login attempt for non-existent email: {}", loginUserDto.getEmail());
+
                     return CustomApiException.builder()
                             .httpStatus(HttpStatus.BAD_REQUEST)
                             .message(ExceptionMessage.entityNotFound("User"))
@@ -73,8 +83,8 @@ public class AuthServiceImpl implements AuthService {
                 });
 
         String token = jwtService.generateToken(user);
-        logger.info("Request to login user with email: {} processed successfully", loginUserDto.getEmail());
 
+        logger.info("Request to login user with email: {} processed successfully", loginUserDto.getEmail());
         return TokenDto.builder()
                 .token(token)
                 .build();
@@ -83,6 +93,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenValidationResponseDto validateToken(TokenDto tokenDto) {
         logger.info("Processing request to validate token");
+
         try {
             jwtService.validateToken(tokenDto.getToken());
             logger.info("Request to validate token processed successfully");
@@ -106,7 +117,6 @@ public class AuthServiceImpl implements AuthService {
                     .build();
         } catch (JwtException e) {
             logger.error("JWT error: {}", e.getMessage(), e);
-
             throw CustomApiException.builder()
                     .httpStatus(HttpStatus.UNAUTHORIZED)
                     .message("Invalid token")
