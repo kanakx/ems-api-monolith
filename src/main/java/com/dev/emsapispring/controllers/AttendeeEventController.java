@@ -26,10 +26,11 @@ public class AttendeeEventController {
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id, @RequestBody AttendeeEventAssociationDto attendeeEventAssociationDto) {
-        logger.info("Received request to add association between attendee with ID {} and event with ID {}", attendeeEventAssociationDto.getIdAttendee(), attendeeEventAssociationDto.getIdEvent());
-        attendeeEventService.update(id, attendeeEventAssociationDto);
-        logger.info("Request to add association between attendee with ID {} and event with ID {} completed", attendeeEventAssociationDto.getIdAttendee(), attendeeEventAssociationDto.getIdEvent());
+    public AttendeeEventAssociationDto update(@PathVariable Long id, @RequestBody AttendeeEventAssociationDto attendeeEventAssociationDto) {
+        logger.info("Received request to update association between attendee with ID {} and event with ID {}", attendeeEventAssociationDto.getIdAttendee(), attendeeEventAssociationDto.getIdEvent());
+        AttendeeEventAssociationDto updated = attendeeEventService.update(id, attendeeEventAssociationDto);
+        logger.info("Request to update association between attendee with ID {} and event with ID {} completed", attendeeEventAssociationDto.getIdAttendee(), attendeeEventAssociationDto.getIdEvent());
+        return updated;
     }
 
     @DeleteMapping

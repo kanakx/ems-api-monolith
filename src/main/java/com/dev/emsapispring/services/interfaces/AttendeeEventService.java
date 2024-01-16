@@ -8,7 +8,7 @@ import java.util.List;
 public interface AttendeeEventService {
 
     List<AttendeeEventAssociationDto> findAll();
-    void update(Long id, AttendeeEventAssociationDto attendeeEventAssociationDto);
+    AttendeeEventAssociationDto update(Long id, AttendeeEventAssociationDto attendeeEventAssociationDto);
     void delete(AttendeeEventAssociationDto attendeeEventAssociationDto);
 
 }

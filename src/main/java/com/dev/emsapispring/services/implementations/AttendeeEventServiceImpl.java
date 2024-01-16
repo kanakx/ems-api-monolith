@@ -29,6 +29,7 @@ public class AttendeeEventServiceImpl implements AttendeeEventService {
     private final AttendeeEventRepository attendeeEventRepository;
     private final EventRepository eventRepository;
     private final AttendeeEventMapper attendeeEventMapper;
+    private static final String ENTITY_NAME = "Attendee";
 
     @Override
     public List<AttendeeEventAssociationDto> findAll() {
@@ -42,7 +43,16 @@ public class AttendeeEventServiceImpl implements AttendeeEventService {
     }
 
     @Override
-    public void update(Long id, AttendeeEventAssociationDto attendeeEventAssociationDto) {
+    public AttendeeEventAssociationDto update(Long id, AttendeeEventAssociationDto attendeeEventAssociationDto) {
+        logger.info("Processing request to update AttendeeEvent by ID: {}", id);
+        AttendeeEvent attendeeEvent = attendeeEventRepository.findById(id).orElseThrow(() -> {
+            logger.warn("Attempted to update a non-existent AttendeeEvent with ID {}", id);
+            return CustomApiException.builder()
+                    .httpStatus(HttpStatus.NOT_FOUND)
+                    .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
+                    .build();
+        });
+
         Long idAttendee = attendeeEventAssociationDto.getIdAttendee();
         logger.info("Processing request to find attendee by ID: {}", idAttendee);
         Optional<Attendee> attendeeOptional = attendeeRepository.findById(idAttendee);
@@ -68,13 +78,13 @@ public class AttendeeEventServiceImpl implements AttendeeEventService {
         logger.info("Request to find event by ID: {} processed successfully", event.getIdEvent());
 
 
-        AttendeeEvent attendeeEvent = AttendeeEvent.builder()
-                .attendee(attendee)
-                .event(event)
-                .status(attendeeEventAssociationDto.getStatus())
-                .build();
+        attendeeEvent.setAttendee(attendee);
+        attendeeEvent.setEvent(event);
+        attendeeEvent.setStatus(attendeeEventAssociationDto.getStatus());
 
-        attendeeEventRepository.save(attendeeEvent);
+        AttendeeEvent saved = attendeeEventRepository.save(attendeeEvent);
+        logger.info("Request to find event by ID: {} processed successfully", event.getIdEvent());
+        return attendeeEventMapper.mapToAssociationDto(saved);
     }
 
     @Override
