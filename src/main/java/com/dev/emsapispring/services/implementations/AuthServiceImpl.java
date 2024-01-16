@@ -60,15 +60,14 @@ public class AuthServiceImpl implements AuthService {
 
         user.setAttendee(attendee);
         User saved = userRepository.save(user);
-
         logger.info("Request to register user with email: {} processed successfully", saved.getEmail());
+
         return userMapper.mapToDto(saved);
     }
 
     @Override
     public TokenDto login(LoginUserDto loginUserDto) {
         logger.info("Processing request to login user with email: {}", loginUserDto.getEmail());
-
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginUserDto.getEmail(), loginUserDto.getPassword())
         );
@@ -76,7 +75,6 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(loginUserDto.getEmail())
                 .orElseThrow(() -> {
                     logger.warn("Login attempt for non-existent email: {}", loginUserDto.getEmail());
-
                     return CustomApiException.builder()
                             .httpStatus(HttpStatus.BAD_REQUEST)
                             .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
@@ -98,20 +96,17 @@ public class AuthServiceImpl implements AuthService {
         try {
             jwtService.validateToken(tokenDto.getToken());
             logger.info("Request to validate token processed successfully");
-
             return TokenValidationResponseDto.builder()
                     .isValid(true)
                     .build();
         } catch (ExpiredJwtException e) {
             logger.error("Token expired: {}", e.getMessage(), e);
-
             throw CustomApiException.builder()
                     .httpStatus(HttpStatus.UNAUTHORIZED)
                     .message("Token expired")
                     .build();
         } catch (MalformedJwtException e) {
             logger.error("Invalid token format: {}", e.getMessage(), e);
-
             throw CustomApiException.builder()
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .message("Invalid token format")
