@@ -90,12 +90,14 @@ public class EventServiceImpl implements EventService {
                     .build();
         });
 
-        eventRepository.findByName(updatedEventDto.getName()).ifPresent(event -> {
-            logger.warn("Attempted to update an event with ID {} with name that already exists: {}", id, updatedEventDto.getName());
-            throw CustomApiException.builder()
-                    .httpStatus(HttpStatus.BAD_REQUEST)
-                    .message(ExceptionMessage.entityAlreadyExists(ENTITY_NAME))
-                    .build();
+        eventRepository.findByName(updatedEventDto.getName()).ifPresent(existingEvent -> {
+            if (!existingEvent.getIdEvent().equals(id)) {
+                logger.warn("Attempted to update an event with ID {} with name that already exists: {}", id, updatedEventDto.getName());
+                throw CustomApiException.builder()
+                        .httpStatus(HttpStatus.BAD_REQUEST)
+                        .message(ExceptionMessage.entityAlreadyExists(ENTITY_NAME))
+                        .build();
+            }
         });
 
         eventToUpdate.setName(updatedEventDto.getName());
