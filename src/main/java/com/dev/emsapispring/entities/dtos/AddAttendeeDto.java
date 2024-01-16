@@ -15,6 +15,7 @@ public class AddAttendeeDto {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
     private UserRole userRole;
 
 }

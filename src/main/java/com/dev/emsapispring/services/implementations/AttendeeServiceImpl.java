@@ -1,6 +1,5 @@
 package com.dev.emsapispring.services.implementations;
 
-import com.dev.emsapispring.entities.dtos.AddAttendeeDto;
 import com.dev.emsapispring.entities.dtos.AttendeeDto;
 import com.dev.emsapispring.entities.dtos.EditAttendeeDto;
 import com.dev.emsapispring.entities.mappers.AttendeeMapper;
