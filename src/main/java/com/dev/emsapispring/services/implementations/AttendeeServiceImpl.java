@@ -60,7 +60,7 @@ public class AttendeeServiceImpl implements AttendeeService {
     //TODO test method
     @Transactional
     @Override
-    public AttendeeDto update(Long id, EditAttendeeDto updatedAttendeeDto) {
+    public AttendeeDto updateById(Long id, EditAttendeeDto updatedAttendeeDto) {
         logger.info("Processing request to update attendee with ID: {}", id);
         Attendee attendee = attendeeRepository.findById(id).orElseThrow(() -> {
             logger.warn("Attempted to update a non-existent attendee with ID {}", id);

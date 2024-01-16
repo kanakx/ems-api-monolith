@@ -9,7 +9,7 @@ public interface AttendeeService {
 
     List<AttendeeDto> findAll();
     AttendeeDto findById(Long id);
-    AttendeeDto update(Long id, EditAttendeeDto updatedAttendeeDto);
+    AttendeeDto updateById(Long id, EditAttendeeDto updatedAttendeeDto);
     void deleteById(Long id);
 
 }

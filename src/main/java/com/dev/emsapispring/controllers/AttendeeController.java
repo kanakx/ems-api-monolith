@@ -37,7 +37,7 @@ public class AttendeeController {
     @PutMapping("/{id}")
     public AttendeeDto update(@PathVariable Long id, @RequestBody EditAttendeeDto updatedAttendeeDto) {
         logger.info("Received request to update attendee with ID: {}", id);
-        AttendeeDto updatedAttendee = attendeeService.update(id, updatedAttendeeDto);
+        AttendeeDto updatedAttendee = attendeeService.updateById(id, updatedAttendeeDto);
         logger.info("Attendee updated successfully for ID: {}", updatedAttendee.getIdAttendee());
         return updatedAttendee;
     }

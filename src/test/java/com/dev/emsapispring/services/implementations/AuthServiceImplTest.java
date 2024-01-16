@@ -17,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -150,6 +152,96 @@ class AuthServiceImplTest {
     }
 
     @Test
+    void changePassword_Success() {
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("1");
+
+        Long userId = 1L;
+        PasswordChangeDto passwordChangeDto = new PasswordChangeDto("currentPassword", "newPassword");
+        User user = User.builder()
+                .idUser(userId)
+//                .email()
+                .password("encodedCurrentPassword")
+                .userRole(UserRole.USER)
+                .build();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(passwordChangeDto.getCurrentPassword(), user.getPassword())).thenReturn(true);
+
+        // When
+        authService.changePassword(userId, passwordChangeDto);
+
+        // Then
+        verify(userRepository).save(any(User.class));
+        verify(passwordEncoder).encode(passwordChangeDto.getNewPassword());
+    }
+
+    @Test
+    void changePassword_Failure_UserNotFound() {
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("1");
+
+        Long userId = 1L;
+        PasswordChangeDto passwordChangeDto = new PasswordChangeDto("currentPassword", "newPassword");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // When
+        // Then
+        assertThrows(CustomApiException.class, () -> authService.changePassword(userId, passwordChangeDto));
+    }
+
+    @Test
+    void changePassword_Failure_Unauthorized() {
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("2");
+
+        Long userId = 1L, loggedInUserId = 2L;
+        PasswordChangeDto passwordChangeDto = new PasswordChangeDto("currentPassword", "newPassword");
+        User user = new User();
+        user.setIdUser(loggedInUserId);
+
+        when(userRepository.findById(loggedInUserId)).thenReturn(Optional.of(user));
+
+        // When
+        // Then
+        assertThrows(CustomApiException.class, () -> authService.changePassword(userId, passwordChangeDto));
+    }
+
+    @Test
+    void changePassword_Failure_IncorrectCurrentPassword() {
+        // Local setup for SecurityContext and Authentication
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("1");
+
+        Long userId = 1L;
+        PasswordChangeDto passwordChangeDto = new PasswordChangeDto("currentPassword", "newPassword");
+        User user = new User();
+        user.setIdUser(userId);
+        user.setPassword("encodedCurrentPassword");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(passwordChangeDto.getCurrentPassword(), user.getPassword())).thenReturn(false);
+
+        // When
+        // Then
+        assertThrows(CustomApiException.class, () -> authService.changePassword(userId, passwordChangeDto));
+    }
+
+
+    @Test
     void validateToken_Success() {
         // Given
         String validToken = "token";
@@ -194,7 +286,8 @@ class AuthServiceImplTest {
 
         doThrow(new MalformedJwtException("Invalid token format")).when(jwtService).validateToken(invalidToken);
 
-        // When & Then
+        // When
+        // Then
         assertThrows(CustomApiException.class, () -> authService.validateToken(tokenDto));
         verify(jwtService, times(1)).validateToken(invalidToken);
     }

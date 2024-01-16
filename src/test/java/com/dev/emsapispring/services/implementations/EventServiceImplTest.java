@@ -3,8 +3,12 @@ package com.dev.emsapispring.services.implementations;
 import com.dev.emsapispring.entities.dtos.AddEventDto;
 import com.dev.emsapispring.entities.dtos.EventDto;
 import com.dev.emsapispring.entities.mappers.EventMapper;
+import com.dev.emsapispring.entities.models.Attendee;
+import com.dev.emsapispring.entities.models.AttendeeEvent;
 import com.dev.emsapispring.entities.models.Event;
 import com.dev.emsapispring.exceptions.CustomApiException;
+import com.dev.emsapispring.repositories.AttendeeEventRepository;
+import com.dev.emsapispring.repositories.AttendeeRepository;
 import com.dev.emsapispring.repositories.EventRepository;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.Test;
@@ -27,6 +31,12 @@ class EventServiceImplTest {
     EventMapper eventMapper;
 
     @Mock
+    private AttendeeRepository attendeeRepository;
+
+    @Mock
+    private AttendeeEventRepository attendeeEventRepository;
+
+    @Mock
     EventRepository eventRepository;
 
     @InjectMocks
@@ -39,18 +49,8 @@ class EventServiceImplTest {
         // Given
         List<Event> eventList = easyRandom.objects(Event.class, 10).toList();
         when(eventRepository.findAll()).thenReturn(eventList);
-        when(eventMapper.mapToDto(any(Event.class))).thenAnswer(methodInvocation -> {
-            Event event = methodInvocation.getArgument(0);
-            return EventDto.builder()
-                    .idEvent(event.getIdEvent())
-                    .name(event.getName())
-                    .type(event.getType())
-                    .startTimestamp(event.getStartTimestamp())
-                    .endTimestamp(event.getEndTimestamp())
-                    .locationName(event.getLocationName())
-                    .description(event.getDescription())
-                    .build();
-        });
+        EventDto dummyEventDto = new EventDto(); // Create a dummy EventDto
+        when(eventMapper.mapToDto(any(Event.class))).thenReturn(dummyEventDto);
 
         // When
         List<EventDto> serviceResult = eventService.findAll();
@@ -99,9 +99,11 @@ class EventServiceImplTest {
         AddEventDto addEventDto = easyRandom.nextObject(AddEventDto.class);
         Event event = easyRandom.nextObject(Event.class);
         EventDto eventDto = easyRandom.nextObject(EventDto.class);
+        Attendee attendee = easyRandom.nextObject(Attendee.class);
+
+        when(attendeeRepository.findById(addEventDto.getIdAttendee())).thenReturn(Optional.of(attendee));
         when(eventRepository.findByName(addEventDto.getName())).thenReturn(Optional.empty());
-        when(eventRepository.save(event)).thenReturn(event);
-        when(eventMapper.mapToEntity(addEventDto)).thenReturn(event);
+        when(eventRepository.save(any(Event.class))).thenReturn(event);
         when(eventMapper.mapToDto(event)).thenReturn(eventDto);
 
         // When
@@ -109,9 +111,10 @@ class EventServiceImplTest {
 
         // Then
         assertEquals(eventDto, serviceResult);
+        verify(attendeeRepository, times(1)).findById(addEventDto.getIdAttendee());
         verify(eventRepository, times(1)).findByName(addEventDto.getName());
-        verify(eventRepository, times(1)).save(event);
-        verify(eventMapper, times(1)).mapToEntity(addEventDto);
+        verify(eventRepository, times(1)).save(any(Event.class));
+        verify(attendeeEventRepository, times(1)).save(any(AttendeeEvent.class));
         verify(eventMapper, times(1)).mapToDto(event);
     }
 
@@ -120,12 +123,30 @@ class EventServiceImplTest {
         // Given
         AddEventDto addEventDto = easyRandom.nextObject(AddEventDto.class);
         Event event = easyRandom.nextObject(Event.class);
+        Attendee attendee = easyRandom.nextObject(Attendee.class);
+
+        when(attendeeRepository.findById(addEventDto.getIdAttendee())).thenReturn(Optional.of(attendee));
         when(eventRepository.findByName(addEventDto.getName())).thenReturn(Optional.of(event));
 
         // When
         // Then
         assertThrows(CustomApiException.class, () -> eventService.save(addEventDto));
+        verify(attendeeRepository, times(1)).findById(addEventDto.getIdAttendee());
         verify(eventRepository, times(1)).findByName(addEventDto.getName());
+        verify(eventRepository, never()).save(any(Event.class));
+    }
+
+    @Test
+    void save_Failure_AttendeeNotFound() {
+        // Given
+        AddEventDto addEventDto = easyRandom.nextObject(AddEventDto.class);
+        when(attendeeRepository.findById(addEventDto.getIdAttendee())).thenReturn(Optional.empty());
+
+        // When
+        // Then
+        assertThrows(CustomApiException.class, () -> eventService.save(addEventDto));
+        verify(attendeeRepository, times(1)).findById(addEventDto.getIdAttendee());
+        verify(eventRepository, never()).findByName(anyString());
         verify(eventRepository, never()).save(any(Event.class));
     }
 
