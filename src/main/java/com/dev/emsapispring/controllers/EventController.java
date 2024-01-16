@@ -43,6 +43,7 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
+    //TODO shouldn't updatedEventDto be of type AddEventDto???
     public EventDto update(@PathVariable Long id, @RequestBody EventDto updatedEventDto) {
         logger.info("Received request to update event with ID: {}", id);
         EventDto updatedEvent = eventService.update(id, updatedEventDto);
