@@ -94,11 +94,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void changePassword(Long idUser, PasswordChangeDto passwordChangeDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentLoggedInUsername = authentication.getName();
+        Long currentLoggedInIdUser = Long.valueOf(authentication.getName());
 
-        User currentUser = userRepository.findByEmail(currentLoggedInUsername)
+        User currentUser = userRepository.findById(currentLoggedInIdUser)
                 .orElseThrow(() -> {
-                    logger.warn("Password change attempt for non-existent user with email: {}", currentLoggedInUsername);
+                    logger.warn("Password change attempt for non-existent user with email: {}", currentLoggedInIdUser);
                     return CustomApiException.builder()
                             .httpStatus(HttpStatus.BAD_REQUEST)
                             .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
