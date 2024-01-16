@@ -2,10 +2,15 @@ package com.dev.emsapispring.services.implementations;
 
 import com.dev.emsapispring.entities.dtos.AddEventDto;
 import com.dev.emsapispring.entities.dtos.EventDto;
+import com.dev.emsapispring.entities.enums.AttendeeEventStatus;
 import com.dev.emsapispring.entities.mappers.EventMapper;
+import com.dev.emsapispring.entities.models.Attendee;
+import com.dev.emsapispring.entities.models.AttendeeEvent;
 import com.dev.emsapispring.entities.models.Event;
 import com.dev.emsapispring.exceptions.CustomApiException;
 import com.dev.emsapispring.exceptions.ExceptionMessage;
+import com.dev.emsapispring.repositories.AttendeeEventRepository;
+import com.dev.emsapispring.repositories.AttendeeRepository;
 import com.dev.emsapispring.repositories.EventRepository;
 import com.dev.emsapispring.services.interfaces.EventService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +30,8 @@ public class EventServiceImpl implements EventService {
     private static final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
     private final EventMapper eventMapper;
     private final EventRepository eventRepository;
+    private final AttendeeRepository attendeeRepository;
+    private final AttendeeEventRepository attendeeEventRepository;
     private static final String ENTITY_NAME = "Event";
 
     @Override
@@ -57,6 +64,21 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDto save(AddEventDto addEventDto) {
         logger.info("Processing request to save a new event with name: {}", addEventDto.getName());
+
+
+        Long idAttendee = addEventDto.getIdAttendee();
+        logger.info("Processing request to find attendee by ID: {}", idAttendee);
+        Optional<Attendee> attendeeOptional = attendeeRepository.findById(idAttendee);
+        Attendee attendee = attendeeOptional.orElseThrow(() -> {
+            logger.warn("Attendee not found for ID: {}", idAttendee);
+            return CustomApiException.builder()
+                    .httpStatus(HttpStatus.NOT_FOUND)
+                    .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
+                    .build();
+        });
+
+        logger.info("Request to find attendee by ID: {} processed successfully", attendee.getIdAttendee());
+
         eventRepository.findByName(addEventDto.getName()).ifPresent(event -> {
             logger.warn("Attempted to save an already existing event with name '{}'", addEventDto.getName());
             throw CustomApiException.builder()
@@ -65,8 +87,24 @@ public class EventServiceImpl implements EventService {
                     .build();
         });
 
-        Event newEvent = eventMapper.mapToEntity(addEventDto);
+        Event newEvent = Event.builder()
+                .name(addEventDto.getName())
+                .type(addEventDto.getType())
+                .startTimestamp(addEventDto.getStartTimestamp())
+                .endTimestamp(addEventDto.getEndTimestamp())
+                .locationName(addEventDto.getLocationName())
+                .description(addEventDto.getDescription())
+                .build();
+
         Event savedEvent = eventRepository.save(newEvent);
+
+        AttendeeEvent attendeeEvent = AttendeeEvent.builder()
+                .attendee(attendee)
+                .event(savedEvent)
+                .status(AttendeeEventStatus.ACCEPTED)
+                .build();
+
+        attendeeEventRepository.save(attendeeEvent);
 
         logger.info("Request to save event '{}' with ID {} processed successfully", savedEvent.getName(), savedEvent.getIdEvent());
         return eventMapper.mapToDto(savedEvent);
