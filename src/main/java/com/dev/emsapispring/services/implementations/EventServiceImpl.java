@@ -32,7 +32,6 @@ public class EventServiceImpl implements EventService {
         logger.info("Processing request to find all events");
         List<Event> eventList = eventRepository.findAll();
         logger.info("Request to find events processed successfully with {} events found", eventList.size());
-
         return eventList.stream()
                 .map(eventMapper::mapToDto)
                 .toList();
@@ -52,7 +51,6 @@ public class EventServiceImpl implements EventService {
         });
 
         logger.info("Request to find event by ID: {} processed successfully", id);
-
         return eventMapper.mapToDto(event);
     }
 
@@ -110,7 +108,6 @@ public class EventServiceImpl implements EventService {
         Event updatedEvent = eventRepository.save(eventToUpdate);
 
         logger.info("Request to update event with ID {} processed successfully", updatedEvent.getIdEvent());
-
         return eventMapper.mapToDto(updatedEvent);
     }
 
@@ -120,7 +117,6 @@ public class EventServiceImpl implements EventService {
         logger.info("Processing request to delete event with ID: {}", id);
         if (!eventRepository.existsById(id)) {
             logger.warn("Attempted to delete a non-existent event with ID: {}", id);
-
             throw CustomApiException.builder()
                     .httpStatus(HttpStatus.NOT_FOUND)
                     .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
@@ -128,7 +124,6 @@ public class EventServiceImpl implements EventService {
         }
 
         eventRepository.deleteById(id);
-
         logger.info("Request to delete event with ID {} processed successfully", id);
     }
 
