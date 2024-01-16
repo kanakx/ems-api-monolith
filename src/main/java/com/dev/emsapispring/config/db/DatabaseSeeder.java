@@ -13,6 +13,7 @@ import com.dev.emsapispring.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +25,8 @@ public class DatabaseSeeder {
     CommandLineRunner commandLineRunner(
             EventRepository eventRepository,
             AttendeeRepository attendeeRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
     ) {
         return args -> {
             Event event1 = Event.builder()
@@ -76,14 +78,14 @@ public class DatabaseSeeder {
 
             User user1 = User.builder()
                     .email("user1@mail.com")
-                    .password("pwd")
+                    .password(passwordEncoder.encode("pwd"))
                     .userRole(UserRole.USER)
                     .build();
 
             User user2 = User.builder()
-                    .email("user1@mail.com")
-                    .password("pwd")
-                    .userRole(UserRole.USER)
+                    .email("admin@admin.com")
+                    .password(passwordEncoder.encode("pwd"))
+                    .userRole(UserRole.ADMIN)
                     .build();
 
             userRepository.saveAll(List.of(user1, user2));
@@ -125,4 +127,5 @@ public class DatabaseSeeder {
              attendeeRepository.saveAll(List.of(attendee1, attendee2));
         };
     }
+
 }
