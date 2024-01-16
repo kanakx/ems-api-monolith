@@ -2,6 +2,7 @@ package com.dev.emsapispring.services.implementations;
 
 import com.dev.emsapispring.entities.dtos.AddAttendeeDto;
 import com.dev.emsapispring.entities.dtos.AttendeeDto;
+import com.dev.emsapispring.entities.dtos.EditAttendeeDto;
 import com.dev.emsapispring.entities.mappers.AttendeeMapper;
 import com.dev.emsapispring.entities.models.Attendee;
 import com.dev.emsapispring.entities.models.User;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +27,10 @@ import java.util.Optional;
 public class AttendeeServiceImpl implements AttendeeService {
 
     private static final Logger logger = LoggerFactory.getLogger(AttendeeServiceImpl.class);
-    private final AttendeeMapper attendeeMapper;
     private final AttendeeRepository attendeeRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AttendeeMapper attendeeMapper;
     private static final String ENTITY_NAME = "Attendee";
 
     @Override
@@ -62,11 +65,10 @@ public class AttendeeServiceImpl implements AttendeeService {
     //TODO test method
     @Transactional
     @Override
-    public AttendeeDto update(Long id, AddAttendeeDto updatedAttendeeDto) {
+    public AttendeeDto update(Long id, EditAttendeeDto updatedAttendeeDto) {
         logger.info("Processing request to update attendee with ID: {}", id);
         Attendee attendee = attendeeRepository.findById(id).orElseThrow(() -> {
             logger.warn("Attempted to update a non-existent attendee with ID {}", id);
-
             return CustomApiException.builder()
                     .httpStatus(HttpStatus.NOT_FOUND)
                     .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
@@ -93,9 +95,7 @@ public class AttendeeServiceImpl implements AttendeeService {
         attendee.setUser(attendeeUser);
 
         Attendee updatedAttendee = attendeeRepository.save(attendee);
-
         logger.info("Request to update attendee with ID {} processed successfully", updatedAttendee.getIdAttendee());
-
         return attendeeMapper.mapToDto(updatedAttendee);
     }
 
@@ -106,7 +106,6 @@ public class AttendeeServiceImpl implements AttendeeService {
         logger.info("Processing request to delete attendee with ID: {}", id);
         if (!attendeeRepository.existsById(id)) {
             logger.warn("Attempted to delete a non-existent attendee with ID: {}", id);
-
             throw CustomApiException.builder()
                     .httpStatus(HttpStatus.NOT_FOUND)
                     .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
@@ -114,7 +113,6 @@ public class AttendeeServiceImpl implements AttendeeService {
         }
 
         attendeeRepository.deleteById(id);
-
         logger.info("Request to delete attendee with ID {} processed successfully", id);
     }
 

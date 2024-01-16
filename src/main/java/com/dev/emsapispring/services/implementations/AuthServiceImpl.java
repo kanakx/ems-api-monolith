@@ -32,6 +32,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private static final String ENTITY_NAME = "User";
 
     @Override
     public UserDto register(RegisterUserDto registerUserDto) {
@@ -40,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
             logger.warn("Registration attempt with already existing email: {}", registerUserDto.getEmail());
             throw CustomApiException.builder()
                     .httpStatus(HttpStatus.BAD_REQUEST)
-                    .message(ExceptionMessage.entityAlreadyExists("User"))
+                    .message(ExceptionMessage.entityAlreadyExists(ENTITY_NAME))
                     .build();
         });
 
@@ -78,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
 
                     return CustomApiException.builder()
                             .httpStatus(HttpStatus.BAD_REQUEST)
-                            .message(ExceptionMessage.entityNotFound("User"))
+                            .message(ExceptionMessage.entityNotFound(ENTITY_NAME))
                             .build();
                 });
 

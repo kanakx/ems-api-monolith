@@ -1,6 +1,6 @@
 package com.dev.emsapispring.controllers;
 
-import com.dev.emsapispring.entities.dtos.AddAttendeeDto;
+import com.dev.emsapispring.entities.dtos.EditAttendeeDto;
 import com.dev.emsapispring.entities.dtos.AttendeeDto;
 import com.dev.emsapispring.services.interfaces.AttendeeService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class AttendeeController {
     }
 
     @PutMapping("/{id}")
-    public AttendeeDto update(@PathVariable Long id, @RequestBody AddAttendeeDto updatedAttendeeDto) {
+    public AttendeeDto update(@PathVariable Long id, @RequestBody EditAttendeeDto updatedAttendeeDto) {
         logger.info("Received request to update attendee with ID: {}", id);
         AttendeeDto updatedAttendee = attendeeService.update(id, updatedAttendeeDto);
         logger.info("Attendee updated successfully for ID: {}", updatedAttendee.getIdAttendee());

@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class EditAttendeeDto {
 
+    private String firstName;
+    private String lastName;
     private String email;
     private UserRole userRole;
 
