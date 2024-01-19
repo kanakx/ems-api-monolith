@@ -11,6 +11,10 @@ This repository hosts the monolithic architecture version of the Event Managemen
 - **Data Management**: In-built data service for handling storage, processing, and retrieval of business data.
 - **Frontend Interface**: A built-in user interface for event browsing, registration, and administration using React.
 
+## Frontend
+
+[**React Frontend**](https://github.com/kanakx/ems-react.git): Provides the user interface for event browsing, login, registration, and administration.
+
 # Technologies and tools
 
 - Spring Boot
