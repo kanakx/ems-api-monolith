@@ -16,7 +16,7 @@ This repository hosts the monolithic architecture version of the Event Managemen
 - Spring Boot
 - Spring Security
 - Hibernate
-- JWT
 - PostreSQL
 - MySQL
 - Docker
+- JWT
