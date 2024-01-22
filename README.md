@@ -9,7 +9,6 @@ This repository hosts the monolithic architecture version of the Event Managemen
 - **Unified Architecture**: Combines all functionalities of the EMS into a single application for simplicity and ease of deployment.
 - **User Authentication and Authorization**: Integrated user authentication system using JWT tokens.
 - **Data Management**: In-built data service for handling storage, processing, and retrieval of business data.
-- **Frontend Interface**: A built-in user interface for event browsing, registration, and administration using React.
 
 ## Frontend
 
