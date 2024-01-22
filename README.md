@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository hosts the monolithic architecture version of the Event Management System (EMS). Designed as a single, unified application, this EMS Monolith integrates user authentication, data management, and a frontend interface in one comprehensive package. 
+This repository hosts the monolithic architecture version of the Event Management System (EMS). Designed as a single, unified application, this EMS Monolith integrates user authentication and data management in one, unified package. 
 
 ## Key Features
 
